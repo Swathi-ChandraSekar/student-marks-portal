@@ -1,0 +1,14 @@
+const nextConfig = require("eslint-config-next");
+
+module.exports = [
+  ...nextConfig,
+  {
+    ignores: [
+      "node_modules/**",
+      ".next/**",
+      "out/**",
+      "build/**",
+      "next-env.d.ts",
+    ],
+  },
+];

@@ -22,6 +22,8 @@ const columnByAssessment: Record<(typeof entryOptions)[number], EntryColumn> = {
 export default function FacultyInternalMarksPage() {
   const [marks, setMarks] = useState<InternalMarkRow[]>(initialMarks);
   const [selectedAssessment, setSelectedAssessment] = useState<(typeof entryOptions)[number]>("AT-I");
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editValue, setEditValue] = useState("");
   const activeColumn = columnByAssessment[selectedAssessment];
 
   function updateMark(id: string, value: string) {
@@ -32,6 +34,17 @@ export default function FacultyInternalMarksPage() {
     );
   }
 
+  function startEditMark(row: InternalMarkRow) {
+    setEditingId(row.id);
+    setEditValue(String(row[activeColumn] ?? ""));
+  }
+
+  function saveEditMark(id: string) {
+    updateMark(id, editValue);
+    setEditingId(null);
+    setEditValue("");
+  }
+
   const columns: DataTableColumn<InternalMarkRow>[] = [
     { key: "registerNumber", header: "Register No.", render: (row) => row.registerNumber },
     { key: "studentName", header: "Name", render: (row) => <span className="font-semibold text-slate-900">{row.studentName}</span> },
@@ -39,17 +52,55 @@ export default function FacultyInternalMarksPage() {
       key: "entry",
       header: `${selectedAssessment} Marks (/50)`,
       align: "right",
-      render: (row) => (
-        <input
-          type="number"
-          min={0}
-          max={50}
-          value={row[activeColumn] ?? ""}
-          onChange={(event) => updateMark(row.id, event.target.value)}
-          className="w-20 rounded-lg border border-slate-200 px-2 py-1 text-right outline-none focus:border-sky-500"
-          placeholder="—"
-        />
-      ),
+      render: (row) =>
+        editingId === row.id ? (
+          <input
+            type="number"
+            min={0}
+            max={50}
+            value={editValue}
+            onChange={(event) => setEditValue(event.target.value)}
+            className="w-20 rounded-lg border border-slate-200 px-2 py-1 text-right outline-none focus:border-sky-500"
+            placeholder="—"
+          />
+        ) : (
+          <span>{row[activeColumn] ?? "—"}</span>
+        ),
+    },
+    {
+      key: "actions",
+      header: "Actions",
+      align: "right",
+      render: (row) =>
+        editingId === row.id ? (
+          <div className="flex gap-2">
+            <button
+              type="button"
+              onClick={() => saveEditMark(row.id)}
+              className="rounded-full border border-sky-200 bg-sky-50 px-2 py-1 text-[10px] font-semibold text-sky-700 hover:bg-sky-100"
+            >
+              Save
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setEditingId(null);
+                setEditValue("");
+              }}
+              className="rounded-full border border-slate-200 px-2 py-1 text-[10px] font-semibold text-slate-600 hover:border-slate-300"
+            >
+              Cancel
+            </button>
+          </div>
+        ) : (
+          <button
+            type="button"
+            onClick={() => startEditMark(row)}
+            className="rounded-full border border-slate-200 px-3 py-1 text-xs font-semibold text-slate-600 transition hover:border-sky-400 hover:text-sky-700"
+          >
+            Edit
+          </button>
+        ),
     },
   ];
 

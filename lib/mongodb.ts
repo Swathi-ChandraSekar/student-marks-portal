@@ -1,3 +1,4 @@
+/* eslint-disable no-var */
 import { MongoClient, type Db } from "mongodb";
 import * as dns from "node:dns";
 

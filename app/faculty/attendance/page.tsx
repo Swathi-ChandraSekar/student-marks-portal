@@ -11,6 +11,8 @@ import type { AttendanceRow } from "@/types/faculty";
 
 export default function FacultyAttendancePage() {
   const [rows, setRows] = useState<AttendanceRow[]>(initialRows);
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editValue, setEditValue] = useState("");
 
   function updateAttended(id: string, value: string) {
     const numeric = Number(value);
@@ -32,6 +34,17 @@ export default function FacultyAttendancePage() {
     );
   }
 
+  function startEdit(row: AttendanceRow) {
+    setEditingId(row.id);
+    setEditValue(String(row.classesAttended));
+  }
+
+  function saveEdit(id: string) {
+    updateAttended(id, editValue);
+    setEditingId(null);
+    setEditValue("");
+  }
+
   const columns: DataTableColumn<AttendanceRow>[] = [
     { key: "registerNumber", header: "Register No.", render: (row) => row.registerNumber },
     { key: "studentName", header: "Name", render: (row) => <span className="font-semibold text-slate-900">{row.studentName}</span> },
@@ -40,16 +53,19 @@ export default function FacultyAttendancePage() {
       key: "classesAttended",
       header: "Attended",
       align: "right",
-      render: (row) => (
-        <input
-          type="number"
-          min={0}
-          max={row.classesConducted}
-          value={row.classesAttended}
-          onChange={(event) => updateAttended(row.id, event.target.value)}
-          className="w-20 rounded-lg border border-slate-200 px-2 py-1 text-right outline-none focus:border-sky-500"
-        />
-      ),
+      render: (row) =>
+        editingId === row.id ? (
+          <input
+            type="number"
+            min={0}
+            max={row.classesConducted}
+            value={editValue}
+            onChange={(event) => setEditValue(event.target.value)}
+            className="w-20 rounded-lg border border-slate-200 px-2 py-1 text-right outline-none focus:border-sky-500"
+          />
+        ) : (
+          row.classesAttended
+        ),
     },
     {
       key: "attendancePercentage",
@@ -61,6 +77,26 @@ export default function FacultyAttendancePage() {
           variant={row.attendancePercentage >= 75 ? "success" : "danger"}
         />
       ),
+    },
+    {
+      key: "actions",
+      header: "Actions",
+      align: "right",
+      render: (row) =>
+        editingId === row.id ? (
+          <div className="flex gap-2">
+            <button type="button" onClick={() => saveEdit(row.id)} className="rounded-full border border-sky-200 bg-sky-50 px-2 py-1 text-[10px] font-semibold text-sky-700 hover:bg-sky-100">
+              Save
+            </button>
+            <button type="button" onClick={() => { setEditingId(null); setEditValue(""); }} className="rounded-full border border-slate-200 px-2 py-1 text-[10px] font-semibold text-slate-600 hover:border-slate-300">
+              Cancel
+            </button>
+          </div>
+        ) : (
+          <button type="button" onClick={() => startEdit(row)} className="rounded-full border border-slate-200 px-3 py-1 text-xs font-semibold text-slate-600 transition hover:border-sky-400 hover:text-sky-700">
+            Edit
+          </button>
+        ),
     },
   ];
 

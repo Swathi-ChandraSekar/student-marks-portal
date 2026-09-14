@@ -55,15 +55,49 @@ export default function LandingPage() {
                 <span className="text-xl text-slate-500">→</span>
               </Link>
 
-              <div className="flex items-center justify-between rounded-2xl border border-dashed border-slate-300 bg-slate-100 px-4 py-4 text-left opacity-80">
+              <Link
+                href="/faculty-login"
+                className="flex items-center justify-between rounded-2xl bg-white px-4 py-4 text-left shadow-sm ring-1 ring-slate-200 transition hover:shadow-md"
+              >
                 <span>
                   <span className="block text-sm text-slate-500">Faculty</span>
                   <span className="mt-1 block text-lg font-bold text-slate-900">Login</span>
                 </span>
-                <span className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
-                  Coming soon
+                <span className="text-xl text-slate-500">→</span>
+              </Link>
+
+              <Link
+                href="/faculty-register"
+                className="flex items-center justify-between rounded-2xl bg-white px-4 py-4 text-left shadow-sm ring-1 ring-slate-200 transition hover:shadow-md"
+              >
+                <span>
+                  <span className="block text-sm text-slate-500">Faculty</span>
+                  <span className="mt-1 block text-lg font-bold text-slate-900">Registration</span>
                 </span>
-              </div>
+                <span className="text-xl text-slate-500">→</span>
+              </Link>
+
+              <Link
+                href="/admin-login"
+                className="flex items-center justify-between rounded-2xl bg-white px-4 py-4 text-left shadow-sm ring-1 ring-slate-200 transition hover:shadow-md"
+              >
+                <span>
+                  <span className="block text-sm text-slate-500">Admin</span>
+                  <span className="mt-1 block text-lg font-bold text-slate-900">Login</span>
+                </span>
+                <span className="text-xl text-slate-500">→</span>
+              </Link>
+
+              <Link
+                href="/admin-register"
+                className="flex items-center justify-between rounded-2xl bg-white px-4 py-4 text-left shadow-sm ring-1 ring-slate-200 transition hover:shadow-md"
+              >
+                <span>
+                  <span className="block text-sm text-slate-500">Admin</span>
+                  <span className="mt-1 block text-lg font-bold text-slate-900">Registration</span>
+                </span>
+                <span className="text-xl text-slate-500">→</span>
+              </Link>
             </div>
           </section>
         </div>
