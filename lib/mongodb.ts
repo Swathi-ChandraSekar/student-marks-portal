@@ -1,4 +1,7 @@
 import { MongoClient, type Db } from "mongodb";
+import * as dns from "node:dns";
+
+dns.setServers(["1.1.1.1", "8.8.8.8"]);
 
 declare global {
   var __studentPortalMongoClient: MongoClient | undefined;
